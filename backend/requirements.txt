@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pandas
+scikit-learn
+mysql-connector-python
+PyJWT
+passlib
+python-multipart
+joblib
+sqlalchemy
+pymysql
+bcrypt
