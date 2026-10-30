@@ -221,6 +221,35 @@ export default function Dashboard() {
         </div>
       </section>
 
+      <section className="dashboard-card rounded-2xl p-5 sm:p-6">
+        <div className="mb-5">
+          <h3 className="font-bold text-slate-900">Sebaran data lebih rinci</h3>
+          <p className="mt-1 text-sm text-slate-500">
+            Bandingkan peminatan dan rekomendasi berdasarkan sumber datanya.
+          </p>
+        </div>
+        <div className="grid gap-6 xl:grid-cols-2">
+          <DistributionComparison
+            title="Peminatan SMA"
+            firstLabel="Dataset CSV"
+            firstDistribution={tracks}
+            firstTotal={summary.total_siswa}
+            secondLabel="Pengisian web"
+            secondDistribution={webTracks}
+            secondTotal={summary.total_pengisian_web}
+          />
+          <DistributionComparison
+            title="Jurusan rekomendasi"
+            firstLabel="Dataset CSV"
+            firstDistribution={recommendations}
+            firstTotal={summary.total_siswa}
+            secondLabel="Pengisian web"
+            secondDistribution={webRecommendations}
+            secondTotal={summary.total_pengisian_web}
+          />
+        </div>
+      </section>
+
       {summary.total_siswa === 0 ? (
         <section className="dashboard-empty rounded-2xl p-7 sm:p-9">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
@@ -449,5 +478,80 @@ function QuickLink({ to, icon: Icon, title, description, tone }) {
       </span>
       <ArrowRight size={16} className="shrink-0 text-slate-400" />
     </Link>
+  );
+}
+
+function DistributionComparison({
+  title,
+  firstLabel,
+  firstDistribution,
+  firstTotal,
+  secondLabel,
+  secondDistribution,
+  secondTotal,
+}) {
+  const categories = [...new Set([
+    ...Object.keys(firstDistribution),
+    ...Object.keys(secondDistribution),
+  ])].sort((first, second) => first.localeCompare(second, 'id'));
+
+  return (
+    <div className="dashboard-distribution rounded-xl p-4 sm:p-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h4 className="text-sm font-bold text-slate-800">{title}</h4>
+        <div className="flex flex-wrap justify-end gap-x-3 gap-y-1 text-[11px] font-semibold text-slate-500">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-emerald-700" /> CSV
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-amber-500" /> Web
+          </span>
+        </div>
+      </div>
+      {categories.length > 0 ? (
+        <div className="space-y-4">
+          {categories.map((category) => {
+            const firstCount = Number(firstDistribution[category] || 0);
+            const secondCount = Number(secondDistribution[category] || 0);
+            const firstPercent = firstTotal ? Math.round((firstCount / firstTotal) * 100) : 0;
+            const secondPercent = secondTotal ? Math.round((secondCount / secondTotal) * 100) : 0;
+
+            return (
+              <div key={category} className="dashboard-distribution-row">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <span className="truncate text-sm font-semibold text-slate-700" title={category}>{category}</span>
+                  <span className="shrink-0 text-[11px] text-slate-500">
+                    {firstCount + secondCount} data
+                  </span>
+                </div>
+                <DistributionBar label={firstLabel} count={firstCount} percent={firstPercent} source="csv" />
+                <DistributionBar label={secondLabel} count={secondCount} percent={secondPercent} source="web" />
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="dashboard-distribution-empty flex min-h-32 items-center justify-center rounded-lg px-5 text-center text-sm text-slate-500">
+          Data sebaran akan muncul setelah ada data siswa.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DistributionBar({ label, count, percent, source }) {
+  return (
+    <div className="grid grid-cols-[82px_minmax(0,1fr)_56px] items-center gap-2">
+      <span className="text-[10px] font-medium text-slate-500">{label}</span>
+      <div className="dashboard-distribution-track">
+        <div
+          className={`dashboard-distribution-fill dashboard-distribution-fill-${source}`}
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+      <span className="text-right text-[10px] font-semibold tabular-nums text-slate-600">
+        {count} · {percent}%
+      </span>
+    </div>
   );
 }

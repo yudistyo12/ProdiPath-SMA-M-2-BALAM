@@ -597,6 +597,43 @@
   color: #52645a;
 }
 
+.dashboard-distribution {
+  border: 1px solid #e7ede9;
+  background: linear-gradient(145deg, #f9fbfa, #fff);
+}
+
+.dashboard-distribution-row + .dashboard-distribution-row {
+  border-top: 1px solid #edf1ee;
+  padding-top: 0.85rem;
+}
+
+.dashboard-distribution-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9efeb;
+}
+
+.dashboard-distribution-fill {
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  transition: width 450ms ease;
+}
+
+.dashboard-distribution-fill-csv {
+  background: linear-gradient(90deg, #047857, #10a36f);
+}
+
+.dashboard-distribution-fill-web {
+  background: linear-gradient(90deg, #d6a821, #f0c84b);
+}
+
+.dashboard-distribution-empty {
+  border: 1px dashed #d7e2da;
+  background: #fbfdfb;
+}
+
 .dashboard-stat-card:hover {
   transform: translateY(-2px);
   border-color: #c7ddd0;
@@ -687,6 +724,7 @@
   .dashboard-quick-link,
   .dashboard-source-csv,
   .dashboard-source-web,
+  .dashboard-distribution-fill,
   .dashboard-primary-button,
   .dashboard-sidebar-cta {
     transition: none;

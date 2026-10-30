@@ -101,6 +101,18 @@ python ml\train.py
 
 Model tersimpan di `models/model_jurusan.pkl`, dengan encoder label di `models/label_encoder.pkl`. Skrip menampilkan akurasi holdout sebagai gambaran awal saja; pada dataset kecil atau kelas yang jarang, nilai ini sangat tidak stabil dan bukan bukti akurasi umum model.
 
+### Mencoba training dengan data sintetis
+
+`data/questionnaire_synthetic_demo.csv` berisi data buatan untuk mencoba alur training. Data ini bukan data siswa sungguhan, tidak boleh dipakai untuk menyimpulkan akurasi atau membuat rekomendasi nyata, dan tidak cocok diimpor sebagai data siswa ke dashboard.
+
+Untuk menguji training tanpa menimpa model yang dipakai aplikasi:
+
+```powershell
+python ml\train.py --data data\questionnaire_synthetic_demo.csv --output-dir models\demo
+```
+
+File hasil uji tersimpan terpisah di `models/demo`. Aplikasi tetap menggunakan model di `models`.
+
 ## Endpoint utama
 
 - `POST /api/predict/` — menghasilkan rekomendasi dari profil akademik dan minat.
