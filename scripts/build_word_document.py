@@ -103,7 +103,7 @@ def create_document():
     cover_sub = doc.add_paragraph()
     cover_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
     cover_sub.paragraph_format.space_after = Pt(36)
-    run_sub = cover_sub.add_run("PROYEK PENGEMBANGAN SISTEM REKOMENDASI PROGRAM STUDI KULIAH (PRODIPATH)\nBERBASIS MACHINE LEARNING UNTUK SISWA KELAS XII")
+    run_sub = cover_sub.add_run("PROYEK PENGEMBANGAN SPK REKOMENDASI PROGRAM STUDI KULIAH (PRODIPATH)\nMENGGUNAKAN METODE SAW UNTUK SISWA KELAS XII")
     run_sub.font.name = "Calibri"
     run_sub.font.size = Pt(11)
     run_sub.font.bold = True
@@ -228,8 +228,9 @@ def create_document():
         "Informasi penjurusan sering kali tersaji secara terpisah, manual, dan belum ada alat bantu digital yang mampu memadukan profil siswa secara objektif."
     )
     add_body_paragraph(
-        "ProdiPath hadir sebagai platform aplikasi web interaktif yang memanfaatkan algoritma Machine Learning (Decision Tree Classifier) "
-        "untuk memberikan rekomendasi program studi secara terukur, objektif, dan transparan bagi siswa kelas XII. Sistem ini "
+        "ProdiPath hadir sebagai sistem pendukung keputusan berbasis web yang menggunakan metode Simple Additive Weighting (SAW) "
+        "untuk merangking alternatif program studi berdasarkan profil akademik dan minat siswa kelas XII. Bobot awal kriteria "
+        "ditetapkan sama rata dan harus divalidasi bersama guru BK. Sistem ini "
         "dirancang untuk menjadi bahan eksplorasi awal dan referensi diskusi terarah antara siswa, guru Bimbingan Konseling (BK), dan orang tua."
     )
 
@@ -238,15 +239,15 @@ def create_document():
         "Mitra utama penerapan proyek ini adalah SMA Muhammadiyah 2 Bandar Lampung. Sasaran pengguna terbagi menjadi dua kategori utama:"
     )
     add_bullet("Siswa aktif kelas XII (lintas jurusan IPA, IPS, dan Bahasa) yang memerlukan eksplorasi awal program studi perguruan tinggi secara mandiri tanpa perlu repot login akun.", "1. Pengguna Utama (Siswa): ")
-    add_bullet("Guru Bimbingan Konseling (BK) dan Tim IT/Tata Usaha Sekolah yang bertindak sebagai administrator sistem untuk mengelola data siswa, meninjau distribusi pilihan, dan mengimpor dataset referensi pelatihan model.", "2. Pengguna Pengelola (Administrator): ")
+    add_bullet("Guru Bimbingan Konseling (BK) dan Tim IT/Tata Usaha Sekolah yang bertindak sebagai administrator sistem untuk mengelola data siswa, meninjau distribusi pilihan, dan mengimpor dataset referensi SAW.", "2. Pengguna Pengelola (Administrator): ")
 
     add_heading_2("1.3 Ruang Lingkup dan Arsitektur Sistem")
     add_body_paragraph(
         "Sistem dibangun dengan arsitektur modern berbasis Client-Server (REST API):"
     )
     add_bullet("Menggunakan React, Vite, dan Tailwind CSS yang responsif, modern, dan interaktif.", "Frontend Web: ")
-    add_bullet("Menggunakan FastAPI (Python) yang menyajikan endpoint prediksi AI, autentikasi berbasis JWT, dan manajemen data siswa.", "Backend API: ")
-    add_bullet("Model Decision Tree Classifier (scikit-learn) yang dilatih menggunakan dataset profil akademik dan peminatan rujukan.", "Machine Learning Engine: ")
+    add_bullet("Menggunakan FastAPI (Python) yang menyajikan perhitungan peringkat SAW, autentikasi berbasis JWT, dan manajemen data siswa.", "Backend API: ")
+    add_bullet("Menggunakan metode SAW untuk menjumlahkan nilai kecocokan kriteria berbobot; bobot awal sama rata dan perlu divalidasi guru BK.", "Metode SPK: ")
     add_bullet("MySQL (metopen_db) untuk penyimpanan data kuesioner siswa, akun pengelola, dan riwayat rekomendasi.", "Database: ")
 
     # ------------------ BAB II: PRODUCT BACKLOG ------------------
@@ -288,8 +289,8 @@ def create_document():
          "1. Terdapat checkbox persetujuan dengan klausul perlindungan privasi data.\n2. Tombol submit rekomendasi terkunci (disabled) jika checkbox belum dicentang.\n3. Status persetujuan dicatat ke database.",
          "Must Have", "2", "Sprint 1"),
 
-        ("PBI-08", "AI-REC", "Sebagai Siswa, saya ingin menerima satu rekomendasi jurusan kuliah terbaik dari model Decision Tree, agar saya mendapat saran terarah untuk studi lanjut.",
-         "1. Backend memanggil model Decision Tree Classifier terlatih.\n2. Menghasilkan label rekomendasi jurusan yang paling sesuai profil.\n3. Hasil prediksi ditampilkan dalam card hasil yang interaktif dan jelas.",
+        ("PBI-08", "SPK", "Sebagai Siswa, saya ingin memperoleh peringkat tiga alternatif program studi berdasarkan kecocokan profil menggunakan metode SAW, agar saya memiliki bahan eksplorasi studi lanjut.",
+         "1. Sistem menghitung nilai kecocokan setiap alternatif pada 9 kriteria.\n2. Sistem menerapkan bobot kriteria dan mengurutkan skor SAW.\n3. Tiga alternatif teratas ditampilkan dengan skor dan jumlah data rujukan.",
          "Must Have", "8", "Sprint 1"),
 
         ("PBI-09", "AI-REC", "Sebagai Siswa, saya ingin membaca detail penjelasan jurusan, peluang karir, dan disclaimer etika rekomendasi, agar saya memahami bahwa hasil adalah rujukan awal.",
@@ -301,7 +302,7 @@ def create_document():
          "Must Have", "3", "Sprint 2"),
 
         ("PBI-11", "DASH", "Sebagai Administrator, saya ingin melihat dashboard ringkasan statistik (total siswa, sebaran jurusan SMA, dan rekomendasi teratas), agar saya dapat memantau tren siswa.",
-         "1. Kartu metrik total siswa, total data latih, dan rekomendasi dominan.\n2. Visualisasi grafik interaktif Chart.js (Bar chart & Doughnut chart).\n3. Data diperbarui real-time saat dashboard dibuka.",
+         "1. Kartu metrik total siswa, total data referensi, dan rekomendasi dominan.\n2. Visualisasi grafik interaktif Chart.js (Bar chart & Doughnut chart).\n3. Data diperbarui real-time saat dashboard dibuka.",
          "Must Have", "5", "Sprint 2"),
 
         ("PBI-12", "STU-MGT", "Sebagai Administrator, saya ingin melihat daftar lengkap data siswa beserta fitur pencarian (berdasarkan NISN/Nama) dan filter jurusan SMA, agar data mudah ditelusuri.",
@@ -312,12 +313,12 @@ def create_document():
          "1. Tombol aksi hapus pada setiap baris data siswa.\n2. Modal konfirmasi keamanan sebelum penghapusan dieksekusi.\n3. Data terhapus permanen dari database dan tabel me-refresh otomatis.",
          "Should Have", "3", "Sprint 2"),
 
-        ("PBI-14", "DATASET", "Sebagai Administrator, saya ingin mengimpor dataset referensi baru berupa file CSV, agar model machine learning dapat diperbarui dengan data rujukan terkini.",
+        ("PBI-14", "DATASET", "Sebagai Administrator, saya ingin mengimpor dataset referensi baru berupa file CSV, agar profil alternatif program studi pada perhitungan SAW menggunakan data rujukan terkini.",
          "1. Form unggah berkas CSV khusus admin.\n2. Validasi struktur kolom (nisn, nilai, minat, rekomendasi_jurusan).\n3. Validasi rentang nilai (0-100) dan minat (1-5) sebelum proses simpan.",
          "Should Have", "5", "Sprint 3"),
 
-        ("PBI-15", "DATASET", "Sebagai Tim Pengembang, saya ingin memiliki skrip training otomatis untuk melatih ulang model Decision Tree dan mengevaluasi akurasinya, agar kualitas model terjaga.",
-         "1. Skrip train.py mengekstrak dataset CSV dan melakukan label encoding.\n2. Memisahkan data train dan holdout test.\n3. Menyimpan bobot model ke model_jurusan.pkl dan encoder ke label_encoder.pkl.",
+        ("PBI-15", "DATASET", "Sebagai Administrator, saya ingin melihat jumlah data rujukan untuk setiap alternatif, agar alternatif yang datanya belum memadai dapat diketahui.",
+         "1. Ringkasan menampilkan jumlah data untuk setiap program studi.\n2. Alternatif dengan kurang dari 5 data diberi penanda bahwa dukungan datanya terbatas.\n3. Ringkasan hanya menghitung data bersumber dataset.",
          "Could Have", "5", "Sprint 3"),
     ]
 
@@ -419,11 +420,11 @@ def create_document():
         r.font.color.rgb = RGBColor(255, 255, 255)
 
     sprint_rows = [
-        ("Sprint 1", "Fondasi Sistem: Autentikasi Pengelola, Form Input Siswa, Validasi, dan Engine Prediksi Inti.",
+        ("Sprint 1", "Fondasi Sistem: Autentikasi Pengelola, Form Input Siswa, Validasi, dan Perhitungan SAW.",
          "PBI-01, PBI-02, PBI-03, PBI-04, PBI-05, PBI-06, PBI-07, PBI-08", "29 Poin", "50.0 %"),
         ("Sprint 2", "Antarmuka Hasil & Pengelolaan: Card Rekomendasi, Detail Prospek Karir, Penyimpanan Web, Dashboard Ringkasan, dan Manajemen Data Siswa.",
          "PBI-09, PBI-10, PBI-11, PBI-12, PBI-13", "21 Poin", "36.2 %"),
-        ("Sprint 3", "Penyempurnaan Dataset: Fitur Import CSV Dataset Latih, Validasi Header/Rentang, dan Skrip Pelatihan Otomatis.",
+        ("Sprint 3", "Penyempurnaan Data Referensi: Impor CSV, Validasi Header/Rentang, dan Ringkasan Jumlah Data per Alternatif.",
          "PBI-14, PBI-15", "8 Poin", "13.8 %"),
     ]
 
@@ -491,7 +492,7 @@ def create_document():
         "1. Siswa (Kelas XII): "
     )
     add_bullet(
-        "Pihak Guru Bimbingan Konseling (BK) atau Tenaga Administrasi Sekolah yang memiliki hak akses kredensial resmi. Bertanggung jawab mengelola data isian siswa, memantau tren distribusi pilihan studi pada dashboard analitik, dan melakukan impor dataset referensi CSV untuk memperbarui data latih model.",
+        "Pihak Guru Bimbingan Konseling (BK) atau Tenaga Administrasi Sekolah yang memiliki hak akses kredensial resmi. Bertanggung jawab mengelola data isian siswa, memantau tren distribusi pilihan studi pada dashboard analitik, dan melakukan impor dataset referensi CSV untuk perhitungan SAW.",
         "2. Administrator / Guru BK: "
     )
 
@@ -502,13 +503,13 @@ def create_document():
         ("UC-01", "Melihat Informasi Sistem & Panduan Studi", "Siswa", "Utama", "Menampilkan beranda pengantar, panduan pengisian profil, dan tujuan rekomendasi."),
         ("UC-02", "Mengisi Profil Akademik, Minat & Bakat", "Siswa", "Utama", "Menginput NISN, nama, jurusan SMA, nilai 4 mapel (0-100), dan minat 1-5."),
         ("UC-03", "Menyetujui Persetujuan Penyimpanan Data", "Siswa", "Utama", "Memberikan persetujuan (consent) penyimpanan data kuesioner ke sistem."),
-        ("UC-04", "Mendapatkan Rekomendasi Jurusan (AI)", "Siswa", "Utama", "Memproses profil ke model Decision Tree dan menampilkan rekomendasi program studi."),
+        ("UC-04", "Mendapatkan Peringkat Rekomendasi Program Studi (SAW)", "Siswa", "Utama", "Menghitung dan menampilkan urutan alternatif program studi berdasarkan kecocokan profil dengan metode SAW."),
         ("UC-05", "Validasi Kelengkapan & Format Nilai Siswa", "Sistem", "«include»", "Memeriksa validitas NISN 10 digit, nilai 0-100, dan minat 1-5 sebelum rekomendasi dihitung."),
         ("UC-06", "Melihat Detail Penjelasan & Alternatif Jurusan", "Siswa", "«extend»", "Menampilkan prospek karir, penjabaran jurusan, dan alternatif bidang studi terkait."),
         ("UC-07", "Login Administrator (Kredensial Akun)", "Administrator", "Utama", "Autentikasi akun admin dengan username dan verifikasi password hash."),
         ("UC-08", "Melihat Dashboard Statistik & Distribusi Dataset", "Administrator", "Utama", "Menampilkan visualisasi grafik sebaran jurusan rekomendasi dan data siswa."),
         ("UC-09", "Mengelola Data Siswa (Cari, Tinjau, Hapus)", "Administrator", "Utama", "Menampilkan tabel data kuesioner web, pencarian nama/NISN, dan hapus entri."),
-        ("UC-10", "Mengimpor Dataset CSV & Validasi Rentang", "Administrator", "Utama", "Mengunggah file CSV data latih baru dengan validasi struktur dan rentang nilai."),
+        ("UC-10", "Mengimpor Dataset CSV & Validasi Rentang", "Administrator", "Utama", "Mengunggah file CSV data referensi SAW dengan validasi struktur dan rentang nilai."),
         ("UC-11", "Logout Sesi Pengelola", "Administrator", "Utama", "Menghapus token JWT aktif dan mengakhiri sesi pengelolaan sistem."),
         ("UC-12", "Verifikasi Sesi Login & Autentikasi JWT", "Sistem", "«include»", "Memeriksa validitas bearer token JWT pada setiap permintaan API terproteksi.")
     ]
@@ -593,7 +594,7 @@ def create_document():
             "post": "Siswa memahami alur kuesioner dan siap mengisi formulir profil diri.",
             "normal": [
                 "1. Siswa mengakses URL website ProdiPath melalui peramban web.",
-                "2. Sistem menampilkan halaman Beranda (Hero Section, penjelasan kriteria, dan disclaimer model).",
+                "2. Sistem menampilkan halaman Beranda (Hero Section, penjelasan kriteria, dan batasan rekomendasi).",
                 "3. Siswa membaca ringkasan alur rekomendasi dan petunjuk pengisian.",
                 "4. Siswa mengklik tombol 'Mulai Rekomendasi' untuk menuju formulir kuesioner profil."
             ],
@@ -638,21 +639,21 @@ def create_document():
         },
         {
             "id": "UC-04",
-            "name": "Mendapatkan Rekomendasi Jurusan (Decision Tree AI)",
+            "name": "Mendapatkan Peringkat Rekomendasi Program Studi (SAW)",
             "actor": "Siswa (Kelas XII)",
-            "desc": "Sistem mengirimkan profil siswa ke backend, mengeksekusi model klasifikasi, dan menyajikan rekomendasi.",
+            "desc": "Sistem membandingkan profil siswa dengan data referensi alternatif, menghitung skor SAW, dan menyajikan peringkat program studi.",
             "pre": "Formulir terisi valid (UC-05 terpenuhi) dan persetujuan data dicentang (UC-03 terpenuhi).",
-            "post": "Rekomendasi jurusan ditampilkan di layar dan data tersimpan ke tabel questionnaire_data.",
+            "post": "Tiga alternatif program studi beserta skor dan urutannya ditampilkan; peringkat pertama dan profil tersimpan di tabel questionnaire_data.",
             "normal": [
                 "1. Siswa menekan tombol 'Dapatkan Rekomendasi Program Studi'.",
                 "2. Frontend mengirimkan payload JSON profil siswa ke endpoint POST /api/predict/.",
-                "3. Backend mengonversi fitur kategori jurusan SMA dan mengeksekusi Decision Tree model.",
-                "4. Backend menyimpan data isian dan hasil prediksi ke MySQL dengan sumber 'kuesioner_web'.",
-                "5. Sistem menampilkan Card Rekomendasi Jurusan yang memuat nama prodi dan kecocokan profil.",
+                "3. Backend membentuk nilai kecocokan pada 9 kriteria dan menghitung skor akhir SAW dengan bobot awal sama rata.",
+                "4. Backend mengurutkan alternatif, lalu menyimpan profil dan alternatif peringkat pertama dengan sumber 'kuesioner_web'.",
+                "5. Sistem menampilkan tiga alternatif teratas beserta skor dan jumlah data rujukan.",
                 "6. Siswa dapat memperluas informasi melalui «extend» UC-06 untuk melihat detail penjelasan."
             ],
             "alt": [
-                "3a. Model AI belum dilatih atau file model_jurusan.pkl korup: Backend merespons status error 500 dan frontend menampilkan saran hubungi admin.",
+                "3a. Dataset referensi tidak tersedia atau tidak memiliki alternatif valid: Backend menolak perhitungan dan menampilkan pesan bahwa data rujukan belum tersedia.",
                 "4a. NISN siswa telah ada sebelumnya: Sistem melakukan UPDATE pada rekaman data NISN yang bersangkutan."
             ]
         },
@@ -660,7 +661,7 @@ def create_document():
             "id": "UC-05",
             "name": "Validasi Kelengkapan & Format Nilai Siswa («include»)",
             "actor": "Sistem (ProdiPath Engine)",
-            "desc": "Memeriksa integritas seluruh isian sebelum diproses lebih lanjut oleh engine klasifikasi.",
+            "desc": "Memeriksa integritas seluruh isian sebelum diproses lebih lanjut oleh perhitungan skor SAW.",
             "pre": "Siswa melakukan interaksi pengisian form dan menekan tombol rekomendasi.",
             "post": "Data diverifikasi valid (siap dikirim ke server) atau ditolak dengan pesan kesalahan visual.",
             "normal": [
@@ -753,7 +754,7 @@ def create_document():
             "id": "UC-10",
             "name": "Mengimpor Dataset CSV & Validasi Format Data",
             "actor": "Administrator / Guru BK",
-            "desc": "Mengunggah berkas CSV dataset eksternal untuk melengkapi data latih rekomendasi.",
+            "desc": "Mengunggah berkas CSV dataset eksternal sebagai data referensi perhitungan SAW.",
             "pre": "Administrator berada di halaman Import Data (/import) dengan token valid («include» UC-12).",
             "post": "Baris data valid tersimpan ke database dengan tag sumber_data='dataset'.",
             "normal": [
@@ -875,14 +876,14 @@ def create_document():
         ("PBI-05", "Input nilai rapor 4 mapel utama skala 0-100", "UC-02, UC-05", "Mengisi Profil Siswa & Validasi Rentang Nilai"),
         ("PBI-06", "Penilaian minat bidang dan analitis skala 1-5", "UC-02, UC-05", "Mengisi Profil Siswa & Validasi Skala Minat"),
         ("PBI-07", "Persetujuan penyimpanan data (consent checkbox)", "UC-03", "Menyetujui Persetujuan Penyimpanan Data"),
-        ("PBI-08", "Menerima rekomendasi prodi dari model Decision Tree", "UC-04", "Mendapatkan Rekomendasi Jurusan (AI)"),
+        ("PBI-08", "Menerima peringkat alternatif prodi dari metode SAW", "UC-04", "Mendapatkan Peringkat Rekomendasi Program Studi (SAW)"),
         ("PBI-09", "Melihat detail prodi, prospek karir, dan disclaimer", "UC-06", "Melihat Detail Penjelasan & Alternatif Jurusan"),
         ("PBI-10", "Penyimpanan hasil kuesioner web ke database MySQL", "UC-04", "Mendapatkan Rekomendasi Jurusan (AI)"),
         ("PBI-11", "Melihat dashboard analitik dan grafik distribusi", "UC-08, UC-12", "Melihat Dashboard & Verifikasi Sesi JWT"),
         ("PBI-12", "Melihat daftar siswa, pencarian, dan filter jurusan", "UC-09, UC-12", "Mengelola Data Siswa & Verifikasi Sesi JWT"),
         ("PBI-13", "Menghapus data kuesioner siswa dengan konfirmasi", "UC-09, UC-12", "Mengelola Data Siswa & Verifikasi Sesi JWT"),
         ("PBI-14", "Import dataset referensi CSV dan validasi rentang", "UC-10, UC-12", "Mengimpor Dataset CSV & Verifikasi Sesi JWT"),
-        ("PBI-15", "Skrip pelatihan ulang model Decision Tree offline", "Modul ML", "ml/train.py & Pembaruan Model Klasifikasi"),
+        ("PBI-15", "Ringkasan kecukupan data rujukan per alternatif", "UC-08", "Meninjau distribusi dan jumlah data referensi"),
     ]
 
     table_trace = doc.add_table(rows=len(trace_data) + 1, cols=4)

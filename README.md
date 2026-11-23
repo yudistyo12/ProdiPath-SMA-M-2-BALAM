@@ -1,6 +1,6 @@
 # ProdiPath
 
-**ProdiPath** adalah prototipe website sistem rekomendasi jurusan kuliah untuk siswa kelas XII SMA Muhammadiyah 2 Bandar Lampung. Sistem membantu siswa mengeksplorasi pilihan studi dengan membandingkan profil akademik, minat, dan kemampuan analitis terhadap contoh data yang tersedia.
+**ProdiPath** adalah prototipe sistem pendukung keputusan (SPK) berbasis web untuk membantu siswa kelas XII SMA Muhammadiyah 2 Bandar Lampung mengeksplorasi pilihan program studi. Sistem menggunakan metode **Simple Additive Weighting (SAW)** untuk merangking alternatif program studi berdasarkan kesesuaian profil akademik, minat, dan peminatan SMA.
 
 Sasaran pengguna proyek adalah siswa kelas XII SMA Muhammadiyah 2 Bandar Lampung. Kebutuhan dan prosedur penerapan di sekolah tetap perlu dikonfirmasi bersama pihak sekolah/guru BK.
 
@@ -10,11 +10,17 @@ Rekomendasi merupakan **bahan pertimbangan awal**, bukan penilaian pasti tentang
 
 1. Siswa mengisi nama, NISN, peminatan/jurusan SMA, serta nilai Matematika, Sains, Sosial, dan Bahasa.
 2. Siswa mengisi skala minat Teknologi, Seni, Komunikasi, dan kemampuan Analitis, lalu menyetujui penyimpanan data.
-3. Backend mengirim profil ke model **Decision Tree** yang dilatih dari dataset berlabel `rekomendasi_jurusan`.
-4. Website menampilkan satu rekomendasi jurusan untuk dieksplorasi lebih lanjut dan menyimpan profil serta hasilnya pada database.
-5. Administrator dapat mengimpor dataset, melihat ringkasan distribusi data, serta meninjau dan menghapus data siswa.
+3. Backend mengambil data referensi berlabel `dataset` dari database dan membentuk profil rata-rata untuk setiap alternatif program studi.
+4. Untuk setiap alternatif, sistem menghitung nilai kecocokan 0–100 pada 9 kriteria: peminatan SMA, empat nilai akademik, tiga minat, dan kemampuan analitis. Kecocokan numerik dihitung dari jarak terhadap profil rata-rata alternatif; kecocokan peminatan dihitung dari proporsi data referensi pada alternatif tersebut yang memiliki peminatan yang sama.
+5. Sistem menerapkan SAW dengan bobot awal sama rata (1/9 per kriteria), menjumlahkan nilai kecocokan berbobot, lalu mengurutkan alternatif dari skor tertinggi.
+6. Website menampilkan tiga alternatif teratas beserta skor dan jumlah data rujukan. Alternatif peringkat pertama disimpan sebagai rekomendasi utama bersama profil siswa.
+7. Administrator dapat mengimpor dataset, melihat ringkasan distribusi data, serta meninjau dan menghapus data siswa.
 
-Pengisian melalui web disimpan dengan sumber `kuesioner_web`; impor CSV disimpan dengan sumber `dataset`. Ringkasan distribusi model hanya menggunakan label dari data latih CSV, tidak mencampur hasil prediksi web sebagai label kebenaran. Data pengisian web dengan NISN yang sama memperbarui entri sebelumnya. Persetujuan penyimpanan dicatat bersama jawaban web. Persetujuan dan penggunaan data harus disampaikan dengan jelas kepada siswa sesuai arahan sekolah sebelum formulir digunakan.
+Untuk kriteria numerik, nilai kecocokan adalah `max(0, 100 × (1 − |nilai siswa − rata-rata alternatif| / rentang kriteria))`, dengan rentang 100 untuk nilai akademik dan 4 untuk skala minat/analitis. Kesesuaian peminatan adalah persentase data referensi pada alternatif yang memiliki peminatan SMA sama. Skor akhir alternatif `i` adalah `V_i = Σ(w_j × r_ij)`; pada bobot awal sama rata, `w_j = 1/9`.
+
+Pengisian melalui web disimpan dengan sumber `kuesioner_web`; impor CSV disimpan dengan sumber `dataset`. Hanya data bersumber `dataset` yang digunakan sebagai profil referensi SAW; hasil rekomendasi web tidak digunakan kembali sebagai data rujukan. Data pengisian web dengan NISN yang sama memperbarui entri sebelumnya. Persetujuan penyimpanan dicatat bersama jawaban web. Persetujuan dan penggunaan data harus disampaikan dengan jelas kepada siswa sesuai arahan sekolah sebelum formulir digunakan.
+
+Bobot sama rata adalah **bobot awal prototipe**, bukan bobot yang telah disetujui sekolah. Kriteria, bobot, dan kelayakan data rujukan harus divalidasi bersama guru BK. Skor SAW menunjukkan kecocokan terhadap data rujukan, bukan peluang keberhasilan atau ukuran baku kemampuan siswa.
 
 ## Fitur
 
@@ -23,14 +29,14 @@ Pengisian melalui web disimpan dengan sumber `kuesioner_web`; impor CSV disimpan
 - Dashboard distribusi jurusan rekomendasi dan jurusan SMA pada dataset.
 - Daftar dan pencarian data siswa untuk administrator.
 - Import CSV dengan validasi kolom dan rentang nilai.
-- Model machine learning dengan fitur jurusan SMA, nilai akademik, minat, dan kemampuan analitis.
+- Perangkingan alternatif program studi menggunakan metode SAW.
 
 ## Teknologi
 
 - **Frontend:** React, Vite, Tailwind CSS, Chart.js.
-- **Backend:** Python, FastAPI, pandas, scikit-learn.
+- **Backend:** Python dan FastAPI.
 - **Database:** MySQL.
-- **Model:** Decision Tree Classifier dengan encoding kategori jurusan SMA.
+- **Metode SPK:** Simple Additive Weighting (SAW), dengan bobot awal sama rata.
 
 ## Format dataset
 
@@ -43,11 +49,11 @@ nisn,nama,jurusan_sma,nilai_matematika,nilai_sains,nilai_sosial,nilai_bahasa,min
 - `jurusan_sma`: `IPA`, `IPS`, atau `Bahasa`.
 - Nilai akademik: bilangan bulat 0–100.
 - Minat dan kemampuan analitis: bilangan bulat 1–5.
-- `rekomendasi_jurusan`: label jurusan rujukan untuk pelatihan model.
+- `rekomendasi_jurusan`: nama alternatif program studi untuk pengelompokan profil referensi SAW.
 - `nisn` disimpan sebagai teks agar angka nol di depan tidak hilang.
 - Pengisian web mensyaratkan NISN 10 digit, nama, serta persetujuan penyimpanan data.
 
-Dataset contoh yang kecil dan label yang tersebar pada banyak jurusan **belum memadai untuk menyimpulkan akurasi atau kelayakan rekomendasi di dunia nyata**. Kumpulkan data yang cukup, seimbang, representatif, dan berizin; evaluasi model pada data yang tidak digunakan saat pelatihan sebelum membuat klaim akurasi.
+Dataset contoh saat ini berisi 25 baris untuk 17 alternatif program studi, sehingga banyak alternatif hanya memiliki sedikit data rujukan. Hasilnya **belum memadai untuk menyimpulkan kelayakan rekomendasi di dunia nyata**. Gunakan data yang cukup, representatif, dan berizin; validasi profil alternatif dan bobot kriteria bersama guru BK sebelum penggunaan nyata.
 
 ## Menyiapkan database
 
@@ -73,7 +79,6 @@ Setelah itu jalankan `database/schema.sql` dan `database/seed.sql`. Tabel lama t
 ```powershell
 .\venv\Scripts\Activate.ps1
 pip install -r backend\requirements.txt
-python ml\train.py
 uvicorn backend.main:app --reload
 ```
 
@@ -91,27 +96,9 @@ Buka URL yang ditampilkan Vite, biasanya `http://localhost:5173`. Jika backend b
 
 Di Windows, `run.bat` dapat digunakan untuk membuka backend, frontend, dan browser. Pastikan dependensi sudah terpasang dan MySQL aktif.
 
-## Melatih ulang model
+## Memperbarui data referensi SAW
 
-Setelah dataset diperbarui, jalankan dari folder proyek:
-
-```powershell
-python ml\train.py
-```
-
-Model tersimpan di `models/model_jurusan.pkl`, dengan encoder label di `models/label_encoder.pkl`. Skrip menampilkan akurasi holdout sebagai gambaran awal saja; pada dataset kecil atau kelas yang jarang, nilai ini sangat tidak stabil dan bukan bukti akurasi umum model.
-
-### Mencoba training dengan data sintetis
-
-`data/questionnaire_synthetic_demo.csv` berisi data buatan untuk mencoba alur training. Data ini bukan data siswa sungguhan, tidak boleh dipakai untuk menyimpulkan akurasi atau membuat rekomendasi nyata, dan tidak cocok diimpor sebagai data siswa ke dashboard.
-
-Untuk menguji training tanpa menimpa model yang dipakai aplikasi:
-
-```powershell
-python ml\train.py --data data\questionnaire_synthetic_demo.csv --output-dir models\demo
-```
-
-File hasil uji tersimpan terpisah di `models/demo`. Aplikasi tetap menggunakan model di `models`.
+Administrator mengimpor CSV melalui fitur dataset. Data dengan sumber `dataset` akan menjadi dasar profil alternatif program studi pada perhitungan SAW. Pengisian kuesioner web tidak menjadi data referensi. Pastikan sumber, izin penggunaan, kualitas data, kecukupan jumlah baris per program studi, kriteria, dan bobot telah divalidasi oleh sekolah.
 
 ## Endpoint utama
 

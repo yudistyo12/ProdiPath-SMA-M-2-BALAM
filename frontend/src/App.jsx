@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard';
 import ImportData from './pages/ImportData';
 import Login from './pages/Login';
 import MahasiswaList from './pages/MahasiswaList';
-import PrediksiAI from './pages/PrediksiAI';
+import RekomendasiSaw from './pages/RekomendasiSaw';
 
 function ProtectedAdminRoute({ children }) {
   const { user, loading } = useAuth();
@@ -28,7 +28,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/prediksi" element={<PrediksiAI />} />
+      <Route path="/prediksi" element={<RekomendasiSaw />} />
       <Route path="/dashboard" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
       <Route path="/mahasiswa" element={<ProtectedAdminRoute><MahasiswaList /></ProtectedAdminRoute>} />
       <Route path="/import" element={<ProtectedAdminRoute><ImportData /></ProtectedAdminRoute>} />

@@ -4,7 +4,7 @@ from backend.routes import auth, students, dataset, predict, dashboard, analysis
 
 app = FastAPI(
     title="ProdiPath API",
-    description="API prototipe rekomendasi jurusan kuliah untuk siswa kelas XII.",
+    description="API SPK ProdiPath dengan metode SAW untuk eksplorasi program studi siswa kelas XII.",
 )
 
 # Setup CORS for frontend

@@ -40,11 +40,11 @@ export default function MahasiswaList() {
     <div className="space-y-6">
       <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="text-sm font-semibold text-blue-700">Data pembelajaran model</p>
+          <p className="text-sm font-semibold text-blue-700">Data referensi SPK</p>
           <h2 className="mt-1 flex items-center gap-3 text-2xl font-black text-slate-900">
             <Users className="text-blue-600" /> Data Siswa
           </h2>
-          <p className="mt-2 text-sm text-slate-500">Tinjau pengisian siswa dari web dan data latih yang diimpor.</p>
+          <p className="mt-2 text-sm text-slate-500">Tinjau pengisian siswa dari web dan data referensi yang diimpor.</p>
         </div>
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -75,7 +75,7 @@ export default function MahasiswaList() {
                 <th className="p-4">Nilai Sains</th>
                 <th className="p-4">Nilai Sosial</th>
                 <th className="p-4">Nilai Bahasa</th>
-                <th className="p-4">Hasil / label jurusan</th>
+                <th className="p-4">Rekomendasi utama</th>
                 <th className="p-4">Sumber</th>
                 <th className="p-4">Persetujuan</th>
                 <th className="p-4 text-right">Aksi</th>
@@ -106,7 +106,7 @@ export default function MahasiswaList() {
                         ? 'bg-teal-50 text-teal-800'
                         : 'bg-slate-100 text-slate-700'
                     }`}>
-                      {student.sumber_data === 'kuesioner_web' ? 'Kuesioner web' : 'Data latih CSV'}
+                      {student.sumber_data === 'kuesioner_web' ? 'Kuesioner web' : 'Data referensi CSV'}
                     </span>
                   </td>
                   <td className="p-4 text-xs font-semibold text-slate-600">
@@ -129,7 +129,7 @@ export default function MahasiswaList() {
           </table>
         </div>
         <div className="border-t border-slate-100 bg-slate-50/70 px-4 py-3 text-xs text-slate-500">
-          Rekomendasi dari pengisian web merupakan hasil model, bukan label kebenaran; data tersebut tidak dihitung sebagai data latih pada ringkasan.
+          Rekomendasi dari pengisian web tidak digunakan sebagai data referensi SAW; perhitungan hanya memakai baris dari impor CSV.
         </div>
       </section>
     </div>

@@ -38,7 +38,7 @@ ax.add_patch(system_box)
 title_box = FancyBboxPatch((20, 89), 60, 4.8, boxstyle="round,pad=0.4,rounding_size=0.8",
                            facecolor='#1E40AF', edgecolor='#1D4ED8', lw=1.5, zorder=2)
 ax.add_patch(title_box)
-ax.text(50, 91.4, "Sistem Rekomendasi Program Studi Kuliah (ProdiPath)",
+ax.text(50, 91.4, "SPK Rekomendasi Program Studi Kuliah (ProdiPath)",
         ha='center', va='center', fontsize=13, fontweight='bold', color='#FFFFFF', zorder=3)
 
 # Draw Use Case Helper Function (Ellipse-like pill)
@@ -75,7 +75,7 @@ usecases = {
     'UC01': {'x': 28, 'y': 80, 'w': 21, 'h': 5.2, 't': 'Melihat Informasi Sistem\n& Panduan Studi', 'id': 'UC-01', 'type': 'siswa'},
     'UC02': {'x': 28, 'y': 64, 'w': 21, 'h': 5.6, 't': 'Mengisi Profil Akademik,\nMinat & Bakat', 'id': 'UC-02', 'type': 'siswa'},
     'UC03': {'x': 28, 'y': 48, 'w': 21, 'h': 5.4, 't': 'Menyetujui Persetujuan\nPenyimpanan Data', 'id': 'UC-03', 'type': 'siswa'},
-    'UC04': {'x': 28, 'y': 32, 'w': 21, 'h': 5.6, 't': 'Mendapatkan Rekomendasi\nJurusan (Decision Tree)', 'id': 'UC-04', 'type': 'siswa'},
+    'UC04': {'x': 28, 'y': 32, 'w': 21, 'h': 5.6, 't': 'Mendapatkan Peringkat\nProgram Studi (SAW)', 'id': 'UC-04', 'type': 'siswa'},
 
     # Middle Column: Include & Extend
     'UC05': {'x': 50, 'y': 64, 'w': 20, 'h': 5.4, 't': 'Validasi Kelengkapan\n& Format Nilai Siswa', 'id': 'UC-05', 'type': 'include'},

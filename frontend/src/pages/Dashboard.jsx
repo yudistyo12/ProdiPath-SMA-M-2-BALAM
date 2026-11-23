@@ -113,7 +113,7 @@ export default function Dashboard() {
       </section>
 
       <section className="dashboard-stat-grid grid gap-4">
-        <StatCard icon={Database} label="Data latih CSV" description="Data yang diimpor sekolah" value={summary.total_siswa} color="green" />
+        <StatCard icon={Database} label="Data referensi CSV" description="Rujukan perhitungan SAW" value={summary.total_siswa} color="green" />
         <StatCard icon={Users} label="Pengisian melalui web" description="Jawaban siswa tersimpan" value={summary.total_pengisian_web} color="teal" />
         <StatCard icon={BookOpen} label="Peminatan SMA" description="Jenis peminatan tercatat" value={totalTrackCategories} color="gold" />
         <StatCard icon={GraduationCap} label="Pilihan jurusan" description="Jenis rekomendasi tercatat" value={totalRecommendationCategories} color="olive" />
@@ -257,7 +257,7 @@ export default function Dashboard() {
           </div>
           <h3 className="mt-4 font-bold text-slate-900">Dataset sekolah belum diimpor</h3>
           <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-600">
-            Pengisian web sudah tercatat terpisah. Impor dataset sekolah jika ingin melihat ringkasan data latih dan distribusi labelnya.
+            Pengisian web sudah tercatat terpisah. Impor dataset sekolah untuk menyediakan data referensi perhitungan SAW.
           </p>
           <Link to="/import" className="dashboard-text-link mt-4 inline-flex items-center gap-1 font-bold">
             Impor dataset <ArrowRight size={16} />
@@ -267,8 +267,8 @@ export default function Dashboard() {
         <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <div className="dashboard-card rounded-2xl p-5 sm:p-7">
             <div className="mb-5">
-              <h3 className="text-lg font-bold text-slate-900">Jurusan pada data latih</h3>
-              <p className="mt-1 text-sm text-slate-500">Jumlah data CSV untuk setiap jurusan rujukan.</p>
+              <h3 className="text-lg font-bold text-slate-900">Program studi pada data referensi</h3>
+              <p className="mt-1 text-sm text-slate-500">Jumlah data CSV untuk setiap alternatif program studi.</p>
             </div>
             <div className="h-[340px]">
               <Bar
@@ -332,7 +332,7 @@ export default function Dashboard() {
           <div className="mb-5">
             <h3 className="text-xl font-black text-slate-900">Jawaban yang dikirim melalui web</h3>
             <p className="mt-1 text-sm text-slate-500">
-              Ringkasan ini hanya memakai pengisian web, tidak dicampur dengan data latih CSV.
+              Ringkasan ini hanya memakai pengisian web, tidak dicampur dengan data referensi CSV untuk perhitungan SAW.
             </p>
           </div>
           <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">

@@ -72,7 +72,7 @@ export default function ImportData() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <section>
-        <p className="text-sm font-semibold text-blue-700">Data untuk pelatihan dan analisis</p>
+        <p className="text-sm font-semibold text-blue-700">Data referensi SPK dan analisis</p>
         <h2 className="mt-1 text-2xl font-black text-slate-900">Dataset siswa kelas XII</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
           Impor data akademik, minat, dan label rekomendasi jurusan. Data dengan NISN yang sama akan diperbarui.

@@ -38,7 +38,7 @@ const indicators = [
   { name: 'kemampuan_analitis', label: 'Kemampuan analitis', max: 5 },
 ];
 
-export default function PrediksiAI() {
+export default function RekomendasiSaw() {
   const [formData, setFormData] = useState(initialValues);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -264,7 +264,37 @@ export default function PrediksiAI() {
                   <p className="mt-5 text-sm font-semibold text-slate-600">Jurusan yang bisa kamu pertimbangkan</p>
                   <h3 className="recommendation-major mt-2 text-2xl font-black leading-tight sm:text-3xl">{result.prediksi}</h3>
                   <p className="mt-4 text-sm leading-6 text-slate-600">
-                    Jawabanmu sudah tersimpan. Cari tahu lebih lanjut tentang mata kuliah dan kampus yang menawarkan jurusan ini.
+                    Hasil peringkat dihitung dengan metode SAW dari kesesuaian profilmu terhadap data rujukan.
+                  </p>
+                  {result.peringkat?.length > 0 && (
+                    <>
+                      <p className="mt-5 text-left text-xs font-semibold text-slate-500">
+                        Peringkat alternatif · skor kecocokan, bukan peluang keberhasilan
+                      </p>
+                      <ol className="mt-2 space-y-2 text-left">
+                        {result.peringkat.map((alternative, index) => (
+                          <li key={alternative.program_studi} className="rounded-xl border border-slate-200 bg-white/80 p-3">
+                            <div className="flex items-start justify-between gap-3">
+                              <span className="text-sm font-bold text-slate-800">
+                                {index + 1}. {alternative.program_studi}
+                              </span>
+                              <span className="shrink-0 text-sm font-extrabold text-blue-700">
+                                {alternative.skor.toFixed(2)}%
+                              </span>
+                            </div>
+                            <p className="mt-1 text-xs text-slate-500">
+                              Berdasarkan {alternative.jumlah_data} data rujukan
+                            </p>
+                          </li>
+                        ))}
+                      </ol>
+                    </>
+                  )}
+                  <p className="mt-4 text-left text-xs leading-5 text-slate-500">
+                    {result.catatan_metode}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">
+                    Jawabanmu sudah tersimpan. Gunakan hasil ini sebagai bahan eksplorasi, lalu cari informasi resmi tentang mata kuliah dan kampus.
                   </p>
                   <button
                     type="button"
